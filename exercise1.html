@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function add()
+            {
+                var number1=document.getElementById('num1').value;
+                var number2=document.getElementById('num2').value;
+                var result=parseInt(number1)+parseInt(number2);
+                document.getElementById('lblresult').innerHTML=result;
+            }
+            function abstract()
+            {
+              var number1=document.getElementById('num1').value;
+              var number2=document.getElementById('num2').value;
+              var result=parseInt(number1)-parseInt(number2);
+              document.getElementById('lblresult').innerHTML=result;
+            }
+        </script>
+        </head>
+    <body>
+    <label>Number 1:</label><br>
+    <input type="text" id="num1"><br>
+    <label>Number 2:</label><br>
+    <input type="text" id="num2"><br>
+    <h3 id="lblresult"></h3>
+    <button onclick="add()">+</button>
+    <button onclick="abstract()">-</button>
+    </body>
+</html>
