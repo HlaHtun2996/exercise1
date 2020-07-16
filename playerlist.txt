@@ -1,0 +1,124 @@
+mysql> show tables;
++---------------+
+| Tables_in_ex1 |
++---------------+
+| players       |
+| team          |
++---------------+
+2 rows in set (0.32 sec)
+
+mysql> select * from team;
++----+-------------------+-------------+
+| id | name              | foundeddate |
++----+-------------------+-------------+
+|  1 | Manchester United | 1870-08-21  |
+|  2 | Manchester City   | 1880-07-29  |
+|  3 | Juventus          | 1874-06-17  |
++----+-------------------+-------------+
+3 rows in set (0.10 sec)
+
+mysql> select * from players;
++------+-------------------+---------+------+--------+--------+--------+
+| id   | name              | jersyno | age  | salary | teamid | height |
++------+-------------------+---------+------+--------+--------+--------+
+|    1 | Marson Greenwood  |      26 |   19 | 450000 |      1 |      6 |
+|    2 |  David Degea      |       1 |   27 | 500000 |      1 |      6 |
+|    3 |  Marcus Rashford  |      10 |   21 | 520000 |      1 |      5 |
+|    4 |  Bruno Fernandes  |      18 |   24 | 550000 |      1 |      6 |
+|    5 | David Silver      |      21 |   30 | 500000 |      2 |      5 |
+|    6 | Bernando Silver   |      20 |   28 | 430000 |      2 |      6 |
+|    7 | Aguero            |      10 |   28 | 530000 |      2 |      6 |
+|    8 | De Bruyle         |      17 |   28 | 530000 |      2 |      6 |
+|    9 | Cristiano Ronaldo |       7 |   34 | 590000 |      3 |      6 |
+|   10 | Paulo Dybala      |      10 |   28 | 500000 |      3 |      4 |
+|   11 | Bernardeschi      |      18 |   28 | 540000 |      3 |      6 |
+|   12 | Adrein Rabiot     |      25 |   28 | 450000 |      3 |      6 |
++------+-------------------+---------+------+--------+--------+--------+
+12 rows in set (0.05 sec)
+
+1.
+mysql> select * from players where players.teamid=1;
++------+------------------+---------+------+--------+--------+--------+
+| id   | name             | jersyno | age  | salary | teamid | height |
++------+------------------+---------+------+--------+--------+--------+
+|    1 | Marson Greenwood |      26 |   19 | 450000 |      1 |      6 |
+|    2 |  David Degea     |       1 |   27 | 500000 |      1 |      6 |
+|    3 |  Marcus Rashford |      10 |   21 | 520000 |      1 |      5 |
+|    4 |  Bruno Fernandes |      18 |   24 | 550000 |      1 |      6 |
++------+------------------+---------+------+--------+--------+--------+
+4 rows in set (0.00 sec)
+
+2.
+mysql> select * from players where salary>5000000;
+Empty set (0.00 sec)
+
+mysql> select * from players where salary>500000;
++------+-------------------+---------+------+--------+--------+--------+
+| id   | name              | jersyno | age  | salary | teamid | height |
++------+-------------------+---------+------+--------+--------+--------+
+|    3 |  Marcus Rashford  |      10 |   21 | 520000 |      1 |      5 |
+|    4 |  Bruno Fernandes  |      18 |   24 | 550000 |      1 |      6 |
+|    7 | Aguero            |      10 |   28 | 530000 |      2 |      6 |
+|    8 | De Bruyle         |      17 |   28 | 530000 |      2 |      6 |
+|    9 | Cristiano Ronaldo |       7 |   34 | 590000 |      3 |      6 |
+|   11 | Bernardeschi      |      18 |   28 | 540000 |      3 |      6 |
++------+-------------------+---------+------+--------+--------+--------+
+6 rows in set (0.00 sec)
+
+3.
+mysql> select *,(select sum(salary) from players where team.id=players.teamid)as salary from team;
++------+-------------------+-------------+---------+
+| id   | name              | foundeddate | salary  |
++------+-------------------+-------------+---------+
+|    1 | Manchester United | 1870-08-21  | 2020000 |
+|    2 | Manchester City   | 1880-07-29  | 1990000 |
+|    3 | Juventus          | 1874-06-17  | 2080000 |
++------+-------------------+-------------+---------+
+3 rows in set (0.00 sec)
+
+4.
+mysql> select * from players where  height<5;
++------+--------------+---------+------+--------+--------+--------+
+| id   | name         | jersyno | age  | salary | teamid | height |
++------+--------------+---------+------+--------+--------+--------+
+|   10 | Paulo Dybala |      10 |   28 | 500000 |      3 |      4 |
++------+--------------+---------+------+--------+--------+--------+
+1 row in set (0.00 sec)
+
+5.
+mysql> select *,(select avg(salary)from players where team.id=players.teamid)as average_salary from team;
++------+-------------------+-------------+----------------+
+| id   | name              | foundeddate | average_salary |
++------+-------------------+-------------+----------------+
+|    1 | Manchester United | 1870-08-21  |    505000.0000 |
+|    2 | Manchester City   | 1880-07-29  |    497500.0000 |
+|    3 | Juventus          | 1874-06-17  |    520000.0000 |
++------+-------------------+-------------+----------------+
+3 rows in set (0.04 sec)
+
+6.
+mysql> select * from players where salary in (select max(salary)from players);
++------+-------------------+---------+------+--------+--------+--------+
+| id   | name              | jersyno | age  | salary | teamid | height |
++------+-------------------+---------+------+--------+--------+--------+
+|    9 | Cristiano Ronaldo |       7 |   34 | 590000 |      3 |      6 |
++------+-------------------+---------+------+--------+--------+--------+
+1 row in set (0.04 sec)
+
+
+mysql> select * from players  where salary in(select min(salary)from players);
++------+-----------------+---------+------+--------+--------+--------+
+| id   | name            | jersyno | age  | salary | teamid | height |
++------+-----------------+---------+------+--------+--------+--------+
+|    6 | Bernando Silver |      20 |   28 | 430000 |      2 |      6 |
++------+-----------------+---------+------+--------+--------+--------+
+1 row in set (0.00 sec)
+
+7.
+mysql> select * from players where age>30 and salary>500000;
++------+-------------------+---------+------+--------+--------+--------+
+| id   | name              | jersyno | age  | salary | teamid | height |
++------+-------------------+---------+------+--------+--------+--------+
+|    9 | Cristiano Ronaldo |       7 |   34 | 590000 |      3 |      6 |
++------+-------------------+---------+------+--------+--------+--------+
+1 row in set (0.00 sec)
